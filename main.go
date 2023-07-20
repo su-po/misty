@@ -3,12 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/joho/godotenv"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/joho/godotenv"
 )
 
 type Raindrop struct {
@@ -41,7 +43,7 @@ func main() {
 	for {
 		url := "https://api.raindrop.io/rest/v1/raindrops/0?search=type%3Aarticle&perpage=50&page=" + fmt.Sprintf("%d", cursor)
 		req, _ := http.NewRequest("GET", url, nil)
-		headerValue := "Bearer " + string(os.Getenv("APITOKEN"))
+		headerValue := "Bearer " + token
 		req.Header.Add("Authorization", headerValue)
 
 		res, err := http.DefaultClient.Do(req)
