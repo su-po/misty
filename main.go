@@ -82,10 +82,10 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			if ok {
 				cmd := exec.Command("open", m.raindrops[m.cursor].URL)
 
-				err := cmd.Start() 
+				err := cmd.Start()
 
 				if err != nil {
-					fmt.Println)
+					fmt.Println("Issue occurred during attempt to open url\n", err)
 				}
 			} else {
 				m.target[m.cursor] = struct{}{}
