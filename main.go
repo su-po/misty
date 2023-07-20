@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"runtime"
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/joho/godotenv"
@@ -31,6 +32,38 @@ type model struct {
 	raindrops Raindrops
 	cursor    int // current feed position
 	target    map[int]struct{}
+}
+
+func open(url string) {
+	var cmd *exec.Cmd
+
+	switch runtime.GOOS {
+	case "linux":
+		cmd = exec.Command("xdg-open", url)
+
+	case "darwin":
+		cmd = exec.Command("open", url)
+
+	case "windows":
+		cmd = exec.Command("cmd", "/c", "start")
+	default:
+		fmt.Println("I may not handle your case yet. Please let me know!")
+		return
+
+	}
+
+	//cmd := exec.Command("open", m.raindrops[m.cursor].URL)
+
+	err := cmd.Start()
+
+	cmd.Wait()
+	if err != nil {
+		fmt.Println("Issue occurred during attempt to open url\n", err)
+		//				}
+
+	}
+
+	// :FIXME: We should probably return the error here.
 }
 
 func buildModel() model {
