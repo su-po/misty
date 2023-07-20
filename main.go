@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/joho/godotenv"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 type Raindrop struct {
@@ -21,6 +21,13 @@ type Raindrop struct {
 type RaindropCollection struct {
 	Result bool       `json:"result"`
 	Items  []Raindrop `json:"items"`
+}
+
+type Raindrops []Raindrop
+
+type model struct {
+	raindrops Raindrops
+	cursor    int // current feed position
 }
 
 func main() {
@@ -50,7 +57,6 @@ func main() {
 		}
 
 		var raindropCollection RaindropCollection
-
 		err = json.Unmarshal(body, &raindropCollection)
 		if err != nil {
 			log.Fatal("Program failed.", err)
