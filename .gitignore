@@ -1,3 +1,5 @@
 .env
-~/*
 result.json
+.DS_STORE
+web.html
+misty
