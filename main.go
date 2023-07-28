@@ -111,18 +111,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.target[m.cursor] = struct{}{}
 			}
 		case "enter":
-			_, ok := m.target[m.cursor]
-			if ok {
-				cmd := exec.Command("open", m.raindrops[m.cursor].URL)
-
-				err := cmd.Start()
-
-				if err != nil {
-					fmt.Println("Issue occurred during attempt to open url\n", err)
-				}
-			} else {
-				m.target[m.cursor] = struct{}{}
-			}
+			url := m.raindrops[m.cursor].URL
+			open(url)
 		}
 	}
 	return m, nil
@@ -158,7 +148,7 @@ func getRaindrops(token string) Raindrops {
 	var items []Raindrop
 	cursor := 0
 	for {
-		url := "https://api.raindrop.io/rest/v1/raindrops/0?search=type%3Aarticle&perpage=50&page=" + fmt.Sprintf("%d", cursor)
+		url := "https://api.raindrop.io/rest/v1/raindrops/0?search=type%3Aarticle&perpage=50&sort=-created&page=" + fmt.Sprintf("%d", cursor)
 		req, _ := http.NewRequest("GET", url, nil)
 		headerValue := "Bearer " + token
 		req.Header.Add("Authorization", headerValue)
